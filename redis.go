@@ -3,8 +3,8 @@ package redis
 import (
 	"fmt"
 	"github.com/go-redis/redis"
-	"strconv"
 	"log"
+	"strconv"
 )
 
 type RedisConnectionParams struct {
@@ -41,9 +41,9 @@ func Connect(p *redis.Options) *redis.Client {
 
 	statusOK := CheckAlive(client)
 
-	if !statusOK{
+	if !statusOK {
 		panic("Redis not alive")
-	} 
-	
+	}
+
 	return client
 }
