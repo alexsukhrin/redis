@@ -11,6 +11,10 @@ type RedisConnectionParams struct {
 	URL, Password, Host, Port, DB string
 }
 
+type Client *redis.Client
+
+type Options *redis.Options
+
 func convertStringToInt(s string) int {
 	result, err := strconv.Atoi(s)
 	if err != nil {
