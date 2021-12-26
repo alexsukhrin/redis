@@ -11,10 +11,6 @@ type RedisConnectionParams struct {
 	URL, Password, Host, Port, DB string
 }
 
-type Client *redis.Client
-
-type Options *redis.Options
-
 func convertStringToInt(s string) int {
 	result, err := strconv.Atoi(s)
 	if err != nil {
@@ -40,8 +36,8 @@ func CheckAlive(c *redis.Client) bool {
 	return true
 }
 
-func Connect(p *redis.Options) *Client {
-	var client Client = redis.NewClient(p)
+func Connect(p *redis.Options) *redis.Client {
+	client := redis.NewClient(p)
 
 	statusOK := CheckAlive(client)
 
@@ -49,10 +45,10 @@ func Connect(p *redis.Options) *Client {
 		panic("Redis not alive")
 	}
 
-	return &client
+	return client
 }
 
-func GetRedisClient(host, port, password, db string) *Client {
+func GetRedisClient(host, port, password, db string) *redis.Client {
 	redisParams := RedisConnectionParams{
 		Host:     host,
 		Port:     port,
