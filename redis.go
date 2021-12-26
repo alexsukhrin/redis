@@ -54,12 +54,12 @@ func Connect(p *redis.Options) *Client {
 
 func GetRedisClient(host, port, password, db string) *Client {
 	redisParams := RedisConnectionParams{
-		Host: host,
-		Port: port,
+		Host:     host,
+		Port:     port,
 		Password: password,
-		DB: db,
+		DB:       db,
 	}
-	
+
 	redisOptions := BuildRedisOptions(&redisParams)
 
 	return Connect(redisOptions)
