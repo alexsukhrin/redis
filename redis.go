@@ -41,7 +41,7 @@ func CheckAlive(c *redis.Client) bool {
 }
 
 func Connect(p *redis.Options) *redis.Client {
-	client := redis.NewClient(p)
+	var client Client = redis.NewClient(p)
 
 	statusOK := CheckAlive(client)
 
