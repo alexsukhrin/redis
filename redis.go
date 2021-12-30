@@ -9,8 +9,8 @@ import (
 
 type Redis struct {
 	URL, Password, Host, Port, DB string
-	Options *r.Options
-	Client *r.Client
+	Options                       r.Options
+	Client                        *r.Client
 }
 
 func convertStringToInt(s string) int {
@@ -21,15 +21,15 @@ func convertStringToInt(s string) int {
 	return result
 }
 
-func (redis *Redis) BuildRedisOptions() *r.Options {
-	return &r.Options{
+func (redis *Redis) BuildRedisOptions() r.Options {
+	return r.Options{
 		Addr:     fmt.Sprintf("%s:%s", redis.Host, redis.Port),
 		Password: redis.Password,
 		DB:       convertStringToInt(redis.DB),
 	}
 }
 
-func (redis *Redis) CheckAlive() bool {
+func (redis *Redis) checkAlive() bool {
 	_, err := redis.Client.Ping().Result()
 	if err != nil {
 		log.Fatal("Error connect to Redis")
@@ -39,8 +39,8 @@ func (redis *Redis) CheckAlive() bool {
 }
 
 func (redis *Redis) Connect() *r.Client {
-	client := r.NewClient(redis.Options)
-	statusOK := redis.CheckAlive()
+	client := r.NewClient(&redis.Options)
+	statusOK := redis.checkAlive()
 
 	if !statusOK {
 		panic("Redis not alive")
