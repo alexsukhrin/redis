@@ -29,7 +29,7 @@ func (redis *Redis) BuildRedisOptions() r.Options {
 	}
 }
 
-func (redis *Redis) checkAlive() bool {
+func (redis *Redis) Alive() bool {
 	_, err := redis.Client.Ping().Result()
 	if err != nil {
 		log.Fatal("Error connect to Redis")
@@ -39,12 +39,5 @@ func (redis *Redis) checkAlive() bool {
 }
 
 func (redis *Redis) Connect() *r.Client {
-	client := r.NewClient(&redis.Options)
-	statusOK := redis.checkAlive()
-
-	if !statusOK {
-		panic("Redis not alive")
-	}
-
-	return client
+	return r.NewClient(&redis.Options)
 }
