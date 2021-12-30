@@ -2,13 +2,15 @@ package redis
 
 import (
 	"fmt"
-	"github.com/go-redis/redis"
+	r "github.com/go-redis/redis"
 	"log"
 	"strconv"
 )
 
-type RedisConnectionParams struct {
+type Redis struct {
 	URL, Password, Host, Port, DB string
+	Options *r.Options
+	Client *r.Client
 }
 
 func convertStringToInt(s string) int {
@@ -19,16 +21,16 @@ func convertStringToInt(s string) int {
 	return result
 }
 
-func BuildRedisOptions(p *RedisConnectionParams) *redis.Options {
-	return &redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", p.Host, p.Port),
-		Password: p.Password,
-		DB:       convertStringToInt(p.DB),
+func (redis *Redis) BuildRedisOptions() *r.Options {
+	return &r.Options{
+		Addr:     fmt.Sprintf("%s:%s", redis.Host, redis.Port),
+		Password: redis.Password,
+		DB:       convertStringToInt(redis.DB),
 	}
 }
 
-func CheckAlive(c *redis.Client) bool {
-	_, err := c.Ping().Result()
+func (redis *Redis) CheckAlive() bool {
+	_, err := redis.Client.Ping().Result()
 	if err != nil {
 		log.Fatal("Error connect to Redis")
 		return false
@@ -36,27 +38,13 @@ func CheckAlive(c *redis.Client) bool {
 	return true
 }
 
-func Connect(p *redis.Options) *redis.Client {
-	client := redis.NewClient(p)
-
-	statusOK := CheckAlive(client)
+func (redis *Redis) Connect() *r.Client {
+	client := r.NewClient(redis.Options)
+	statusOK := redis.CheckAlive()
 
 	if !statusOK {
 		panic("Redis not alive")
 	}
 
 	return client
-}
-
-func GetRedisClient(host, port, password, db string) *redis.Client {
-	redisParams := RedisConnectionParams{
-		Host:     host,
-		Port:     port,
-		Password: password,
-		DB:       db,
-	}
-
-	redisOptions := BuildRedisOptions(&redisParams)
-
-	return Connect(redisOptions)
 }
