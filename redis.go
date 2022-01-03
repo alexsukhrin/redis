@@ -9,7 +9,7 @@ import (
 
 type Redis struct {
 	URL, Password, Host, Port, DB string
-	Options                       *r.Options
+	Params                       *r.Options
 	Client                        *r.Client
 }
 
@@ -21,7 +21,7 @@ func convertStringToInt(s string) int {
 	return result
 }
 
-func (redis *Redis) BuildRedisOptions() *r.Options {
+func (redis *Redis) Options() *r.Options {
 	return &r.Options{
 		Addr:     fmt.Sprintf("%s:%s", redis.Host, redis.Port),
 		Password: redis.Password,
@@ -39,5 +39,5 @@ func (redis *Redis) Alive() bool {
 }
 
 func (redis *Redis) Connect() *r.Client {
-	return r.NewClient(redis.Options)
+	return r.NewClient(redis.Params)
 }
