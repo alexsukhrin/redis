@@ -9,7 +9,7 @@ import (
 
 type Redis struct {
 	URL, Password, Host, Port, DB string
-	Params                       *r.Options
+	Params                        *r.Options
 	Client                        *r.Client
 }
 
